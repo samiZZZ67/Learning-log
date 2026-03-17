@@ -1,19 +1,132 @@
 {% extends 'learning_logs/base.html' %}
-{% block content %}
-  <p>Topic: {{ topic }}</p>
 
-  <p>Entries:</p>
-  <p>
-    <a href="{% url 'learning_logs:new_entry' topic.id %}">Add new entry</a>
+{% block content %}
+<style>
+  /* Real-life analogy: A dark, focused studio environment */
+  body {
+    background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
+    min-height: 100vh;
+    padding: 40px 10px;
+    margin: 0;
+    color: #f8fafc;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Add Entry Link - Styled like a glowing "New Task" light on a dashboard */
+  .add-entry-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    text-decoration: none;
+    color: #10b981; /* Success Green - Like a 'Go' signal */
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 12px 24px;
+    border: 2px solid #10b981;
+    border-radius: 50px; /* Pill shape like a high-end remote button */
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .add-entry-link:hover {
+    background: #10b981;
+    color: #0f172a;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    transform: translateY(-3px);
+  }
+
+  /* The Entry Card - Like a high-end OLED tablet display */
+  .entry-card {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    list-style: none;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    border-left: 6px solid #6366f1;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  }
+
+  .entry-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  .entry-date {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+  }
+
+  .entry-text {
+    color: #ffffff;
+    line-height: 1.7;
+    font-size: 1.15rem;
+    margin-top: 15px;
+  }
+
+  .edit-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #818cf8;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .edit-link:hover {
+    background: #6366f1;
+    color: white;
+  }
+
+  .empty-message {
+    text-align: center;
+    padding: 60px;
+    color: #64748b;
+    font-style: italic;
+    list-style: none;
+  }
+</style>
+
+<p>
+  <a class="add-entry-link" href="{% url 'learning_logs:new_entry' topic.id %}">
+    + Add new entry
+  </a>
+</p>
+
+{% for entry in entries %}
+
+ <li class="entry-card">
+
+   <p class="entry-date">{{ entry.data_added|date:'M d, Y H:i' }}</p>
+
+   <p class="entry-text">{{ entry.text|linebreaks }}</p>
+
+   <p>
+    <a class="edit-link" href="{% url 'learning_logs:edit_entry' entry.id %}">
+    Edit entry
+    </a>
   </p>
-  <ul>
-  {% for entry in entries %}
-     <li>
-       <p>{{ entry.data_added|date:'M d, Y H:i' }}</p>
-       <p>{{ entry.text|linebreaks }}</p>
-     </li>
-  {% empty %}
-     <li>There are no entries for this topic yet.</li>
-  {% endfor %}
-  </ul>
+
+ </li>
+{% empty %}
+
+ <li class="empty-message">
+    There are no entries for this topic yet.
+ </li>
+{% endfor %}
 {% endblock content %}
