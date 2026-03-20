@@ -101,8 +101,12 @@
     list-style: none;
   }
 </style>
-
-<p>
+<h2>
+  <a class="add-entry-link" href="{% url 'learning_logs:topic' topic.id %}">
+    {{ topic.text }}
+  </a>
+</h2>
+  
   <a class="add-entry-link" href="{% url 'learning_logs:new_entry' topic.id %}">
     + Add new entry
   </a>
