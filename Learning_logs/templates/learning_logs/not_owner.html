@@ -1,0 +1,11 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+<div class="zen-card">
+    <h2>Access Denied</h2>
+    <p style="color:red;">
+        You cannot add entries to this {{topic}} topic because it is not yours.
+    </p>
+    <a href="{% url 'learning_logs:topics' %}">Back to your topics</a>
+</div>
+{% endblock content %}

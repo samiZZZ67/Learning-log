@@ -139,7 +139,6 @@
     
     <div class="zen-card">
         <h2>Add Entry</h2>
-
         <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
             {% csrf_token %}
             <div class="form-container">
