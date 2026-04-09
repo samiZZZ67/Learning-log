@@ -1,91 +1,17 @@
 {% extends "learning_logs/base.html" %}
+{% block title %}Logged out · Learning Log{% endblock title %}
 {% block content %}
-<style>
-  .logout-wrap {
-    max-width: 720px;
-    margin: 10px auto;
-    text-align: center;
-    color: #f8fbff;
-  }
-
-  .logout-card {
-    padding: 40px 28px;
-    border-radius: 22px;
-    background: linear-gradient(145deg, rgba(76, 201, 240, 0.14), rgba(247, 37, 133, 0.12));
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
-  }
-
-  .logout-kicker {
-    font-size: 0.8rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #9fd8ea;
-    margin-bottom: 14px;
-  }
-
-  .logout-title {
-    margin: 0 0 12px;
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: #ffffff;
-  }
-
-  .logout-text {
-    margin: 0 auto 28px;
-    max-width: 52ch;
-    color: #d7e7f3;
-    line-height: 1.6;
-    font-size: 1.05rem;
-  }
-
-  .logout-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .logout-btn {
-    display: inline-block;
-    text-decoration: none;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    padding: 12px 20px;
-    border-radius: 999px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-  }
-
-  .logout-btn.primary {
-    background: #4cc9f0;
-    color: #072b3a !important;
-  }
-
-  .logout-btn.secondary {
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
-    opacity: 0.95;
-  }
-</style>
-
-<section class="logout-wrap">
-  <div class="logout-card">
-    <p class="logout-kicker">Session Ended</p>
-    <h1 class="logout-title">You are logged out </h1>
-    <p class="logout-text">
-      Your account session has been closed safely. 
-      
-    </p>
-    <p>{{user.username}} please do not come back.🙌🙌🙌</p>
-    <div class="logout-actions">
-      <a class="logout-btn primary" href="{% url 'learning_logs:index' %}">Go Home</a>
-      <a class="logout-btn secondary" href="{% url 'users:login' %}">Log In Again</a>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">You’re logged out</h1>
+      <p class="muted">Your session has ended safely.</p>
     </div>
   </div>
-</section>
+
+  <div class="card">
+    <div class="actions">
+      <a class="btn btn-primary" href="{% url 'learning_logs:index' %}">Go home</a>
+      <a class="btn" href="{% url 'users:login' %}">Log in again</a>
+    </div>
+  </div>
 {% endblock content %}

@@ -1,11 +1,37 @@
 {% extends "learning_logs/base.html" %}
+
 {% block content %}
-  <p>Add a new topic:</p>
-    
-   <form action="{% url 'learning_logs:new_topic' %}" method='post'>
-     {% csrf_token %}
-     {{ form.as_p }}
-     <button name="submit">Add topic</button>
+<div class="page-header">
+  <div>
+    <h1 class="page-title">New Topic</h1>
+    <p class="muted">Create a topic to organize your entries.</p>
+  </div>
+</div>
+
+<style>
+  /* Style for field-specific errors */
+  .errorlist {
+    color: red;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  /* Optional: highlight the input field when there’s an error */
+  input.error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+  }
+</style>
+
+<div class="card">
+  <form action="{% url 'learning_logs:new_topic' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">Add topic</button>
+      <a class="btn" href="{% url 'learning_logs:topics' %}">Cancel</a>
+    </div>
   </form>
-    
+</div>
 {% endblock content %}

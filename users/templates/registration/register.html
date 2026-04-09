@@ -1,9 +1,22 @@
 {% extends "learning_logs/base.html" %}
+{% block title %}Register · Learning Log{% endblock title %}
 {% block content %}
-<form method="post" action="{% url 'users:register' %}">
-{% csrf_token %}
-{{ form.as_p }}
-<button name="submit">Register</button>
-<!-- <input type="hidden" name="next" value="{% url 'learning_logs:topics' %}" /> -->
-</form>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Create account</h1>
+      <p class="muted">Start your learning log in a few seconds.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <form method="post" action="{% url 'users:register' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="actions">
+        <button class="btn btn-primary" name="submit" type="submit">Register</button>
+        <a class="btn" href="{% url 'users:login' %}">Log in</a>
+      </div>
+      <!-- <input type="hidden" name="next" value="{% url 'learning_logs:topics' %}" /> -->
+    </form>
+  </div>
 {% endblock content %}

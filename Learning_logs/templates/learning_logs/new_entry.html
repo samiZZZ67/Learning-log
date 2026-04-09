@@ -1,151 +1,24 @@
 {% extends "learning_logs/base.html" %}
 
 {% block content %}
-<style>
-    /* 1. The Liquid Mesh Background (The "Feeling of Relief") */
-    body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: 'Inter', -apple-system, sans-serif;
-        overflow-x: hidden;
-        /* Dynamic Mesh Gradient */
-        background-color: #e0eafc;
-        background-image: 
-            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%), 
-            radial-gradient(at 0% 100%, hsla(339,49%,30%,1) 0, transparent 50%), 
-            radial-gradient(at 50% 100%, hsla(225,39%,30%,1) 0, transparent 50%), 
-            radial-gradient(at 100% 100%, hsla(253,16%,7%,1) 0, transparent 50%);
-        background-attachment: fixed;
-        background-size: 200% 200%;
-        animation: liquidMovement 15s ease infinite alternate;
-    }
-
-    @keyframes liquidMovement {
-        0% { background-position: 0% 0%; }
-        100% { background-position: 100% 100%; }
-    }
-
-    /* 2. The Floating Glass Card */
-    .zen-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 750px;
-        padding: 20px;
-        animation: floatEffect 6s ease-in-out infinite;
-    }
-
-    @keyframes floatEffect {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-15px); }
-    }
-
-    .zen-card {
-        background: rgba(255, 255, 255, 0.08); /* Transparent Glass */
-        backdrop-filter: blur(25px) saturate(180%);
-        -webkit-backdrop-filter: blur(25px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 40px;
-        padding: 60px;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-        color: white;
-    }
-
-    /* 3. Typography & Links */
-    .topic-breadcrumb {
-        text-decoration: none;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.9rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        display: block;
-        margin-bottom: 10px;
-        transition: color 0.3s;
-    }
-    .topic-breadcrumb:hover { color: #fff; }
-
-    h2 {
-        font-size: 2.5rem;
-        font-weight: 200;
-        margin: 0 0 40px 0;
-        background: linear-gradient(to right, #fff, rgba(255,255,255,0.4));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    /* 4. The Form Elements (Clean & Advanced) */
-    form p { margin-bottom: 30px; }
-
-    label {
-        display: block;
-        margin-bottom: 15px;
-        font-weight: 300;
-        opacity: 0.8;
-        font-size: 0.9rem;
-    }
-
-    /* Styling Django's generated fields */
-    input[type="text"], textarea {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 20px;
-        color: white;
-        font-size: 1.1rem;
-        outline: none;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-sizing: border-box;
-    }
-
-    input:focus, textarea:focus {
-        background: rgba(255, 255, 255, 0.12);
-        border-color: rgba(255, 255, 255, 0.5);
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
-        transform: scale(1.02);
-    }
-
-    /* 5. The "Glow" Submit Button */
-    .submit-btn {
-        width: 100%;
-        padding: 22px;
-        border: none;
-        border-radius: 20px;
-        background: #fff;
-        color: #1a1a1a;
-        font-size: 1.1rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 20px;
-    }
-
-    .submit-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
-        background: #f0f0f0;
-    }
-
-    .submit-btn:active { transform: scale(0.98); }
-
-</style>
-
-<div class="zen-wrapper">
-    <a class="topic-breadcrumb" href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
-    
-    <div class="zen-card">
-        <h2>Add Entry</h2>
-        <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
-            {% csrf_token %}
-            <div class="form-container">
-                {{ form.as_p }}
-            </div>
-            <button type="submit" name="submit" class="submit-btn">Publish Entry</button>
-        </form>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Add entry</h1>
+      <p class="muted">
+        Topic:
+        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+      </p>
     </div>
-</div>
+  </div>
+
+  <div class="card">
+    <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="actions">
+        <button type="submit" name="submit" class="btn btn-primary">Publish entry</button>
+        <a class="btn" href="{% url 'learning_logs:topic' topic.id %}">Cancel</a>
+      </div>
+    </form>
+  </div>
 {% endblock content %}

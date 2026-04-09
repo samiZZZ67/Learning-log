@@ -1,11 +1,19 @@
 {% extends "learning_logs/base.html" %}
 
 {% block content %}
-<div class="zen-card">
-    <h2>Access Denied</h2>
-    <p style="color:red;">
-        You cannot add entries to this {{topic}} topic because it is not yours.
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Access denied</h1>
+      <p class="muted">You don’t have permission to change this topic.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="text-danger">
+      You cannot add entries to the topic “{{ topic }}” because it is not yours.
     </p>
-    <a href="{% url 'learning_logs:topics' %}">Back to your topics</a>
-</div>
+    <div class="actions">
+      <a class="btn" href="{% url 'learning_logs:topics' %}">Back to topics</a>
+    </div>
+  </div>
 {% endblock content %}

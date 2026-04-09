@@ -1,14 +1,30 @@
 {% extends "learning_logs/base.html" %}
 {% block content %}
-  <p>Topics</p>
-   <ul>
-     {% for topic in topics %}
-     <li>
-        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Topics</h1>
+      <p class="muted">Open a topic to view its entries.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" href="{% url 'learning_logs:new_topic' %}">New topic</a>
+    </div>
+  </div>
+
+  <ul class="card-list">
+    {% for topic in topics %}
+      <li class="card">
+        <a class="topic-link" href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+        <div class="topic-meta">Created on: {{ topic.data_added|date:'M d, Y H:i' }}</div>
+        <div class="topic-title">{{ topic.title }}</div>
       </li>
-     {% empty %}
-      <li>No topics have been added yet.</li>
-     {% endfor %}
-   </ul>
-   <a href="{% url 'learning_logs:new_topic' %}">Add a new topic</a>
+    {% empty %}
+      <li class="empty-state">No topics have been added yet.</li>
+    {% endfor %}
+  </ul>
 {% endblock content %}
+{% for topic in topics %}
+  <div class="topic">
+    <div class="topic-meta">Created on: {{ topic.data_added|date:'M d, Y H:i' }}</div>
+    <div class="topic-title">{{ topic.title }}</div>
+  </div>
+{% endfor %}

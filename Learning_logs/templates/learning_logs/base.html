@@ -1,124 +1,41 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning Log</title>
-    <style>
-        /* 1. THE BACKGROUND (The "Atmosphere") */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Deep dark blue gradient that stays fixed when you scroll */
-            background: radial-gradient(circle at top, #1b263b, #0d1b2a);
-            background-attachment: fixed;
-            margin: 0;
-            padding: 40px 20px;
-            color: #ffffff;
-            min-height: 100vh;
-        }
-
-        /* 2. THE NAVIGATION (The "Menu") */
-        nav {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            border-radius: 50px;
-            margin: 0 auto 40px auto;
-            max-width: fit-content;
-            display: flex;
-            gap: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #4cc9f0; /* Bright Blue */
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            color: #f72585; /* Glows Pink on hover */
-            text-shadow: 0 0 10px #f72585;
-        }
-
-        /* 3. THE CONTENT BOX (The "Glass Window") */
-        .container {
-            background: rgba(255, 255, 255, 0.08); /* Very transparent */
-            backdrop-filter: blur(20px); /* Blurs the background behind it */
-            -webkit-backdrop-filter: blur(20px);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 800px;
-            margin: 0 auto;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        /* 4. THE TOPIC LINKS (The "Legibility Fix") */
-        /* This makes sure your topics are WHITE and easy to see */
-        .container a {
-            color: #ffffff !important; 
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 600;
-            transition: all 0.2s ease-in-out;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        /* When you have already clicked a topic (Visited) */
-        .container a:visited {
-            color: #bdc3c7 !important; /* Turns a light grey so you know you've been there */
-        }
-
-        /* When you point at a topic (Hover) */
-        .container a:hover {
-            color: #000000 !important; /* Text turns black */
-            background-color: #ffde22; /* Background turns bright yellow like a highlighter */
-            box-shadow: 0 0 15px #ffde22;
-        }
-
-        /* Styling for the list items to make them look organized */
-        li {
-            list-style: none;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border-left: 5px solid #4cc9f0;
-        }
-
-        h1, h2 {
-            color: #0fb6e9;
-            margin-top: 0;
-        }
-    </style>
+    <title>{% block title %}Learning Log{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'learning_logs/site.css' %}">
 </head>
 <body>
+    <div class="app">
+        <header class="site-header wrap">
+            <nav class="nav" aria-label="Primary navigation">
+                <div class="nav__left">
+                    <a class="brand" href="{% url 'learning_logs:index' %}">Learning Log</a>
+                    <a class="nav__link" href="{% url 'learning_logs:topics' %}">Topics</a>
+                </div>
 
-    <nav>
-        <a href="{% url 'learning_logs:index' %}">Learning Log</a>
-        <a href="{% url 'learning_logs:topics' %}">Topics</a> -
-        {% if user.is_authenticated %}
-            Hello, {{ user.username }} .
-            <form method="post" action="{% url 'users:logout' %}" style="display: inline; margin: 0;">
-                {% csrf_token %}
-                <button type="submit" style="background: none; border: none; color: #4cc9f0; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 0;">Log out</button>
-            </form>
-        {% else %}
-            <a href="{% url 'users:register' %}">Register</a> -
-            <a href="{% url 'users:login' %}">Log in</a>
-        {% endif %}
-    </nav>
+                <div class="nav__right">
+                    {% if user.is_authenticated %}
+                        <span class="nav__user">Signed in as {{ user.username }}</span>
+                        <form class="nav__form" method="post" action="{% url 'users:logout' %}">
+                            {% csrf_token %}
+                            <button class="link-button" type="submit">Log out</button>
+                        </form>
+                    {% else %}
+                        <a class="nav__link" href="{% url 'users:register' %}">Register</a>
+                        <a class="nav__link" href="{% url 'users:login' %}">Log in</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
 
-    <div class="container">
-        {% block content %}{% endblock content %}
+        <main class="wrap">
+            <div class="content">
+                {% block content %}{% endblock content %}
+            </div>
+        </main>
     </div>
-
 </body>
 </html>

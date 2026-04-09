@@ -1,8 +1,14 @@
 {% extends "learning_logs/base.html" %}
 {% block content %}
 
-<p>Learning Log</p>
-<p>Learning Log helps you keep track of your learning, for any topic you're
-learning about.</p>
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Learning Log</h1>
+    <p class="muted">Track what you’re learning, one topic at a time.</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-primary" href="{% url 'learning_logs:topics' %}">View topics</a>
+  </div>
+</div>
 
 {% endblock content %}
