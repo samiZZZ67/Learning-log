@@ -3,10 +3,18 @@
 {% block content %}
   <div class="page-header">
     <div>
-      <h1 class="page-title">Add entry</h1>
+      <h1 class="page-title" data-typewriter data-speed="34" data-delay="120">Add entry</h1>
       <p class="muted">
-        Topic:
-        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+        <span data-typewriter data-text="Topic:" data-speed="18" data-delay="650"></span>
+        <a class="color-link" href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+      </p>
+      <p class="muted" style="margin: 0;">
+        <span
+          data-typewriter
+          data-text="Start typing below — the editor will follow your pace."
+          data-speed="14"
+          data-delay="1050"
+        ></span>
       </p>
     </div>
   </div>

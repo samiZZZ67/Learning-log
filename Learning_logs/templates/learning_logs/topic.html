@@ -5,7 +5,7 @@
     <div>
       <h1 class="page-title">{{ topic.text }}</h1>
       <p class="muted">
-        <a href="{% url 'learning_logs:topics' %}">Topics</a>
+        <a class="color-link" href="{% url 'learning_logs:topics' %}">Topics</a>
         <!-- <span aria-hidden="true">/</span>
         {{ topic.text }} -->
        
@@ -13,7 +13,10 @@
     </div>
     <div class="actions">
       <a class="btn btn-primary" href="{% url 'learning_logs:new_entry' topic.id %}">Add entry</a>
-      <a class="btn btn-primary" href="{% url 'learning_logs:delete_topic' topic.id %}">Delete</a>
+       <a class="btn btn-primary" href="{% url 'learning_logs:edit_topic' topic.id %}">Edit topic</a>
+      <a class="btn btn-danger" href="{% url 'learning_logs:delete_topic' topic.id %}">Delete topic</a>
+     
+
     </div>
   </div>
 
@@ -24,7 +27,7 @@
         <div class="entry-body">{{ entry.text|linebreaks }}</div>
         <div class="entry-actions">
           <a class="btn btn-sm" href="{% url 'learning_logs:edit_entry' entry.id %}">Edit entry</a>
-          <a class="btn btn-sm" href="{% url 'learning_logs:delete_entry' entry.id %}">Delete entry</a>
+          <a class="btn btn-sm btn-danger" href="{% url 'learning_logs:delete_entry' entry.id %}">Delete entry</a>
         </div>
       </li>
     {% empty %}

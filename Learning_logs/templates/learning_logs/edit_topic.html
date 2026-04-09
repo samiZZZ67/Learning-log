@@ -1,16 +1,24 @@
 {% extends "learning_logs/base.html" %}
+{% load tz %}
+
 {% block content %}
   <div class="page-header">
     <div>
-      <h1 class="page-title" data-typewriter data-speed="34" data-delay="120">Edit entry</h1>
+      <h1 class="page-title" data-typewriter data-speed="34" data-delay="120">Edit topic</h1>
+
       <p class="muted">
         <span data-typewriter data-text="Topic:" data-speed="18" data-delay="650"></span>
-        <a class="color-link" href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+        <a class="color-link" href="{% url 'learning_logs:topic' topic.id %}">
+          {{ topic.text }}
+        </a>
       </p>
+
+      <p class="topic-meta">Created: {{ topic.data_added|date:"M d, Y H:i" }}</p>
+
       <p class="muted" style="margin: 0;">
         <span
           data-typewriter
-          data-text="Make changes smoothly — your cursor glow tracks your typing."
+          data-text="Make changes smoothly - your cursor glow tracks your typing."
           data-speed="14"
           data-delay="1050"
         ></span>
@@ -19,13 +27,14 @@
   </div>
 
   <div class="card">
-    <form action="{% url 'learning_logs:edit_entry' entry.id %}" method="post">
+    <form action="{% url 'learning_logs:edit_topic' topic.id %}" method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <div class="actions">
-        <button class="btn btn-primary" name="submit" type="submit">Save changes</button>
+        <button class="btn btn-primary" type="submit">Save changes</button>
         <a class="btn" href="{% url 'learning_logs:topic' topic.id %}">Cancel</a>
       </div>
     </form>
   </div>
 {% endblock content %}
+

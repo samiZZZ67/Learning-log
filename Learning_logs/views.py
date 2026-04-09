@@ -16,14 +16,34 @@ def topics(request):
     topics = Topic.objects.filter(owner=request.user).order_by('-data_added')
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
+
 @login_required
 def topic(request, topic_id):
     """Show a single topic and all its entries."""
     topic = get_object_or_404(Topic, id=topic_id)
-    # check_topic_owner(request,topic)
+    check_topic_owner(request,topic)
     entries = topic.entry_set.order_by('-data_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
+
+@login_required
+def edit_topic(request,topic_id):
+    topic=get_object_or_404(Topic,id=topic_id)
+    is_owner=(topic.owner==request.user)
+    if not is_owner:
+        return render (request,'learning_logs/not_owner.html',{
+            'topic':topic
+        })
+    if request.method !='POST':
+        form=TopicForm(instance=topic)
+    else:
+        form=TopicForm(instance=topic,data=request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect('learning_logs:topic',topic_id=topic.id)
+
+    context={'topic':topic,'form':form}
+    return render(request,'learning_logs/edit_topic.html',context)
 
 @login_required
 def  new_topic(request):

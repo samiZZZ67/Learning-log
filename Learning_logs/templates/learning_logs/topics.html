@@ -15,16 +15,9 @@
       <li class="card">
         <a class="topic-link" href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
         <div class="topic-meta">Created on: {{ topic.data_added|date:'M d, Y H:i' }}</div>
-        <div class="topic-title">{{ topic.title }}</div>
       </li>
     {% empty %}
       <li class="empty-state">No topics have been added yet.</li>
     {% endfor %}
   </ul>
 {% endblock content %}
-{% for topic in topics %}
-  <div class="topic">
-    <div class="topic-meta">Created on: {{ topic.data_added|date:'M d, Y H:i' }}</div>
-    <div class="topic-title">{{ topic.title }}</div>
-  </div>
-{% endfor %}

@@ -1,180 +1,92 @@
 # Learning Log
 
-## Current Project Overview
+Learning Log is a Django project for keeping notes about what you’re learning. It supports user accounts, per-user topics, and entries inside each topic.
 
-Learning Log is an early-stage Django project for recording what a user is learning about. At the current stage, the project supports creating topics, adding entries under a topic, viewing saved topics and entries, and editing existing entries through server-rendered Django pages.
+## Tech Stack
 
-This README reflects only the functionality that exists in the current project files.
+- Django (project generated with Django 6.0.2)
+- SQLite (`db.sqlite3`)
+- Server-rendered Django templates + a small amount of shared CSS/JS for UI polish
 
-## Development Progress So Far
+## Current Features (Implemented)
 
-### What currently works
+- Authentication
+  - Register, log in, log out
+  - Django admin available at `/admin/`
+- Topics (per user)
+  - List your topics
+  - Create, edit, delete topics
+  - Prevents duplicate topic names per user (case-insensitive)
+- Entries (per topic, per user)
+  - Create, edit, delete entries
+  - Ownership checks (you can’t modify another user’s topics/entries)
+- UI
+  - Shared layout and consistent theme (`Learning_logs/templates/learning_logs/base.html`)
+  - Hover effects + typewriter-style headline text on the home page
 
-- A `Topic` model is defined to store learning subjects.
-- An `Entry` model is defined to store notes linked to a specific topic.
-- The home page renders successfully.
-- A topics page lists all saved topics.
-- A topic detail page shows all entries connected to one topic.
-- A form page allows creating new topics.
-- A form page allows adding a new entry to a chosen topic.
-- A form page allows editing an existing entry.
-- URL routing is connected from the project level to the app level.
-- Templates are organized with a shared base layout and page-specific templates.
-- Both models are registered in the Django admin.
-- Initial migrations for `Topic` and `Entry` exist.
+## Project Structure
 
-### What is not implemented yet
+- `myproject/` — Django project configuration (`settings.py`, `urls.py`, `wsgi.py`)
+- `Learning_logs/` — main app (topics + entries)
+- `users/` — registration + auth routes (includes Django’s built-in auth URLs)
+- `db.sqlite3` — SQLite database (dev)
 
-- User authentication or user-specific data ownership.
-- Validation or permission checks around which user can edit data.
-- Delete functionality for topics or entries.
-- Automated tests beyond the default empty test file.
-- Production-ready configuration such as deployment settings or hardened security.
-- A custom admin configuration beyond basic model registration.
-- Any API endpoints; the app is currently server-rendered HTML only.
-- Search, filtering, pagination, tagging, or dashboards.
+## Key Routes
 
-## Current Features in the Codebase
+- `/` — home
+- `/topics/` — your topics (login required)
+- `/topics/<topic_id>/` — topic detail + entries (login required)
+- `/new_topic/` — create topic (login required)
+- `/edit_topic/<topic_id>/` — edit topic (login required)
+- `/delete_topic/<topic_id>/` — delete topic (login required)
+- `/new_entry/<topic_id>/` — create entry (login required)
+- `/edit_entry/<entry_id>/` — edit entry (login required)
+- `/delete_entry/<entry_id>/` — delete entry (login required)
+- `/users/` — Django auth routes (login/logout/password reset, etc.)
+- `/users/register/` — register
+- `/admin/` — Django admin
 
-### Topic management
+## Run Locally (Development)
 
-- Users can create a topic using a Django `ModelForm`.
-- Topics are listed in ascending order by creation time.
-- Each topic links to its own detail page.
+This repo doesn’t currently include a `requirements.txt`, so install Django manually.
 
-### Entry management
+```powershell
+cd .\Learning-log
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install "django>=6.0,<7.0"
 
-- Users can add a new entry to a specific topic.
-- Entries are displayed on the topic detail page.
-- Entries are ordered with newest first on the topic page.
-- Users can edit an existing entry.
+# Apply migrations / create DB tables
+python .\sam.py migrate
 
-### Page structure
+# (Optional) create an admin user
+python .\sam.py createsuperuser
 
-- The app uses a shared `base.html` template for navigation and layout.
-- Child templates extend the base template for individual pages.
-- Forms are submitted with CSRF protection enabled in templates.
+# Start the dev server
+python .\sam.py runserver
+```
 
-## File Responsibilities
+Then open `http://127.0.0.1:8000/`.
 
-### Project files
+## Roadmap (Planned Improvements — Not Yet Implemented)
 
-- `myproject/settings.py`
-  - Configures the Django project.
-  - Includes the `Learning_logs` app in `INSTALLED_APPS`.
-  - Uses SQLite as the current database.
-  - Enables template loading through app directories.
+The items below are **ideas/features to add or improve later**. This list is **not exhaustive** — more features and refinements will be added beyond what’s listed here.
 
-- `myproject/urls.py`
-  - Registers the Django admin route.
-  - Includes the app URL configuration at the root path.
+1. **Search**
+   - Search topics and/or entries (title + body)
+2. **Profile**
+   - User profile page (bio, avatar, preferences, stats)
+3. **Comment**
+   - Comments on entries (and moderation / ownership rules)
+4. **URL support on the entry (including paste)**
+   - Auto-detect URLs in entry text and render them as clickable links
+5. **API call (AI)**
+   - AI features (examples: summarize an entry, suggest tags, generate a quiz, rewrite notes)
+6. **Table supporter in the entry**
+   - Rich text / Markdown support so tables render nicely (and possibly code blocks, checklists, etc.)
 
-### App files
+## Notes
 
-- `Learning_logs/models.py`
-  - Defines `Topic` and `Entry`.
-  - Connects `Entry` to `Topic` with a `ForeignKey`.
-  - Adds readable string representations for both models.
+- Ownership checks currently restrict editing/deleting to the topic owner.
+- For production, you’ll want to add environment-based settings, `ALLOWED_HOSTS`, secret management, and proper static file handling.
 
-- `Learning_logs/forms.py`
-  - Defines `TopicForm` and `EntryForm` using `ModelForm`.
-  - Limits exposed fields to the text content needed for the current forms.
-  - Uses a `Textarea` widget for entry text.
-
-- `Learning_logs/views.py`
-  - Contains function-based views for:
-    - home page
-    - topic list
-    - topic detail
-    - new topic form
-    - new entry form
-    - edit entry form
-  - Handles GET/POST logic for creating and updating records.
-  - Redirects after successful form submission.
-
-- `Learning_logs/urls.py`
-  - Maps app routes to the current views.
-  - Names routes for use in templates and redirects.
-
-- `Learning_logs/admin.py`
-  - Registers `Topic` and `Entry` with the Django admin site.
-
-- `Learning_logs/tests.py`
-  - Exists, but currently contains no implemented tests.
-
-### Templates
-
-- `Learning_logs/templates/learning_logs/base.html`
-  - Shared layout and navigation for the app.
-
-- `Learning_logs/templates/learning_logs/index.html`
-  - Simple landing page introducing the project.
-
-- `Learning_logs/templates/learning_logs/topics.html`
-  - Shows all topics and links to add a new one.
-
-- `Learning_logs/templates/learning_logs/topic.html`
-  - Displays one topic and its related entries.
-  - Includes links to add a new entry and edit existing entries.
-
-- `Learning_logs/templates/learning_logs/new_topic.html`
-  - Renders the form for creating a topic.
-
-- `Learning_logs/templates/learning_logs/new_entry.html`
-  - Renders the form for adding an entry to a selected topic.
-
-- `Learning_logs/templates/learning_logs/edit_entry.html`
-  - Renders the form for editing an existing entry.
-
-### Database history
-
-- `Learning_logs/migrations/0001_initial.py`
-  - Initial migration for the first model setup.
-
-- `Learning_logs/migrations/0002_entry.py`
-  - Adds the `Entry` model and its relationship to topics.
-
-## Django Concepts Used So Far
-
-- Django project/app structure
-- URL routing with `path()` and `include()`
-- Function-based views
-- Template inheritance with `{% extends %}` and `{% block %}`
-- Model definitions with `CharField`, `TextField`, `DateTimeField`, and `ForeignKey`
-- Reverse relationship access through `topic.entry_set`
-- `ModelForm` for creating and editing database records
-- Form handling with GET and POST requests
-- Redirects after successful form submission
-- Admin registration
-- Migrations for database schema changes
-- Template tags such as `{% url %}` and `{% csrf_token %}`
-
-## Current Functionality Status
-
-| Area | Status | Notes |
-| --- | --- | --- |
-| Project routing | Implemented | App routes are included from the project URL config |
-| Topic model | Implemented | Stores topic text and creation date |
-| Entry model | Implemented | Stores entry text, creation date, and topic link |
-| Topic listing page | Implemented | Displays saved topics |
-| Topic detail page | Implemented | Displays entries for a selected topic |
-| Create topic | Implemented | Uses `TopicForm` |
-| Create entry | Implemented | Uses `EntryForm` and attaches entry to a topic |
-| Edit entry | Implemented | Existing entries can be updated |
-| Admin integration | Implemented | Basic model registration only |
-| Tests | Not started | `tests.py` is still empty |
-| Authentication | Not implemented | No login, registration, or ownership checks |
-| Delete actions | Not implemented | No delete views or buttons |
-| API layer | Not implemented | HTML views only |
-
-## Next Steps
-
-- Add automated tests for models, views, and forms.
-- Introduce authentication so data can belong to specific users.
-- Add ownership and access checks before editing data.
-- Add delete actions for topics and entries.
-- Improve project setup completeness and developer documentation if more files are added later.
-
-## Summary
-
-At this point, Learning Log is a working Django CRUD-style practice project with the core create, read, and edit flow in place for topics and entries. The foundation is established, but the project is still in an early development phase and does not yet include authentication, testing, or more advanced data management features.
