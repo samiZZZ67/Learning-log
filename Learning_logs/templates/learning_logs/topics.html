@@ -19,6 +19,6 @@
     {% empty %}
       <li class="empty-state">No topics have been added yet.</li>
     {% endfor %}
-    {% include "pagination.html" with page=page_obj %}
+    {% include "pagination.html" with page=topics %}
   </ul>
 {% endblock content %}
