@@ -7,7 +7,7 @@ urlpatterns = [
     # Home page
      path('', views.index, name='index'),
      # Page that shows all topics.
-     path('topics/',views.topics,name='topics'),
+     path('topics/',views.TopicsListView.as_view(),name='topics'),
      # Detail page for a single topic.
      path('topics/<int:topic_id>/',views.topic, name='topic'),
      #Pages for adding a new topic

@@ -1,0 +1,398 @@
+{% if page.has_other_pages %}
+<style>
+  /* Advanced Pagination Styles */
+  .advanced-pagination {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  }
+
+  .pagination-info {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    letter-spacing: 0.025em;
+  }
+
+  .pagination-highlight {
+    font-weight: 700;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding: 0 0.25rem;
+  }
+
+  .pagination-total-pages {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
+
+  .pagination-nav-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  .pagination-nav-item {
+    margin: 0;
+  }
+
+  .pagination-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .pagination-link:hover:not(.disabled) {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  .pagination-nav-item.active .pagination-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pagination-active-indicator {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .pagination-nav-item.disabled .pagination-link {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f3f4f6;
+  }
+
+  .pagination-nav {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .pagination-icon {
+    fill: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  .pagination-link:hover .pagination-icon {
+    transform: translateX(-2px);
+  }
+
+  .pagination-link:hover .pagination-icon:last-child {
+    transform: translateX(2px);
+  }
+
+  .pagination-jump {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .pagination-jump-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+  }
+
+  .pagination-jump-input {
+    width: 70px;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+  }
+
+  .pagination-jump-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .pagination-jump-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pagination-jump-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  }
+
+  @keyframes slideUp {
+    from {
+      width: 0;
+      opacity: 0;
+    }
+    to {
+      width: 20px;
+      opacity: 1;
+    }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 640px) {
+    .pagination-nav-text {
+      display: none;
+    }
+    
+    .pagination-link {
+      padding: 0.5rem;
+    }
+    
+    .pagination-jump {
+      flex-wrap: wrap;
+    }
+    
+    .pagination-info {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .advanced-pagination {
+      background: linear-gradient(135deg, rgba(31,41,55,0.9) 0%, rgba(17,24,39,0.95) 100%);
+      border-color: rgba(255,255,255,0.1);
+    }
+    
+    .pagination-link {
+      background: #1f2937;
+      color: #e5e7eb;
+      border-color: #374151;
+    }
+    
+    .pagination-nav-item.disabled .pagination-link {
+      background: #111827;
+    }
+    
+    .pagination-jump-input {
+      background: #1f2937;
+      color: #e5e7eb;
+      border-color: #374151;
+    }
+  }
+</style>
+
+<div class="advanced-pagination">
+  <div class="pagination-info">
+    Showing 
+    <span class="pagination-highlight">{{ page.start_index }}</span> 
+    to 
+    <span class="pagination-highlight">{{ page.end_index }}</span> 
+    of 
+    <span class="pagination-highlight">{{ page.paginator.count }}</span> 
+    topics
+    {% if page.paginator.num_pages > 1 %}
+      <span class="pagination-total-pages">
+        (Page {{ page.number }} of {{ page.paginator.num_pages }})
+      </span>
+    {% endif %}
+  </div>
+
+  <ul class="pagination-nav-list">
+    <!-- First & Previous -->
+    {% if page.has_previous %}
+      <li class="pagination-nav-item">
+        <a class="pagination-link pagination-nav" href="?page=1" aria-label="First">
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>
+          </svg>
+          <span class="pagination-nav-text">First</span>
+        </a>
+      </li>
+      <li class="pagination-nav-item">
+        <a class="pagination-link pagination-nav" href="?page={{ page.previous_page_number }}" aria-label="Previous">
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+          <span class="pagination-nav-text">Prev</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="pagination-nav-item disabled">
+        <span class="pagination-link pagination-nav">
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>
+          </svg>
+          <span class="pagination-nav-text">First</span>
+        </span>
+      </li>
+      <li class="pagination-nav-item disabled">
+        <span class="pagination-link pagination-nav">
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+          <span class="pagination-nav-text">Prev</span>
+        </span>
+      </li>
+    {% endif %}
+
+    <!-- Smart page numbers with ellipsis -->
+    {% for num in page.paginator.page_range %}
+      {% if num == page.number %}
+        <li class="pagination-nav-item active">
+          <span class="pagination-link">{{ num }}</span>
+          <span class="pagination-active-indicator"></span>
+        </li>
+      {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
+        <li class="pagination-nav-item">
+          <a class="pagination-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+      {% elif num == 1 or num == page.paginator.num_pages %}
+        <li class="pagination-nav-item">
+          <a class="pagination-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+      {% elif num == page.number|add:'-4' or num == page.number|add:'4' %}
+        <li class="pagination-nav-item ellipsis">
+          <span class="pagination-link">...</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Next & Last -->
+    {% if page.has_next %}
+      <li class="pagination-nav-item">
+        <a class="pagination-link pagination-nav" href="?page={{ page.next_page_number }}" aria-label="Next">
+          <span class="pagination-nav-text">Next</span>
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+          </svg>
+        </a>
+      </li>
+      <li class="pagination-nav-item">
+        <a class="pagination-link pagination-nav" href="?page={{ page.paginator.num_pages }}" aria-label="Last">
+          <span class="pagination-nav-text">Last</span>
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM18 6h2v12h-2z"/>
+          </svg>
+        </a>
+      </li>
+    {% else %}
+      <li class="pagination-nav-item disabled">
+        <span class="pagination-link pagination-nav">
+          <span class="pagination-nav-text">Next</span>
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+          </svg>
+        </span>
+      </li>
+      <li class="pagination-nav-item disabled">
+        <span class="pagination-link pagination-nav">
+          <span class="pagination-nav-text">Last</span>
+          <svg class="pagination-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM18 6h2v12h-2z"/>
+          </svg>
+        </span>
+      </li>
+    {% endif %}
+  </ul>
+
+  <!-- Quick jump to page -->
+  <div class="pagination-jump">
+    <label for="page-jump" class="pagination-jump-label">Jump to page:</label>
+    <input type="number" id="page-jump" class="pagination-jump-input" 
+           min="1" max="{{ page.paginator.num_pages }}" 
+           placeholder="{{ page.number }}">
+    <button class="pagination-jump-btn" id="jump-btn">Go</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Get values from Django template
+  const maxPages = parseInt('{{ page.paginator.num_pages }}');
+  const currentPage = parseInt('{{ page.number }}');
+  
+  // Get DOM elements
+  const jumpInput = document.getElementById('page-jump');
+  const jumpBtn = document.getElementById('jump-btn');
+  
+  // Function to jump to page
+  function jumpToPage() {
+    const page = parseInt(jumpInput.value);
+    
+    if (!isNaN(page) && page >= 1 && page <= maxPages) {
+      window.location.href = `?page=${page}`;
+    } else {
+      jumpInput.style.borderColor = '#dc2626';
+      jumpInput.style.animation = 'shake 0.3s ease-in-out';
+      setTimeout(() => {
+        jumpInput.style.borderColor = '';
+        jumpInput.style.animation = '';
+      }, 300);
+    }
+  }
+  
+  // Add click event to button
+  if (jumpBtn) {
+    jumpBtn.addEventListener('click', jumpToPage);
+  }
+  
+  // Add enter key event to input
+  if (jumpInput) {
+    jumpInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        jumpToPage();
+      }
+    });
+  }
+})();
+</script>
+{% endif %}

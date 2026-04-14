@@ -3,19 +3,29 @@ from django.contrib.auth.decorators import login_required
 from .models import Topic, Entry
 from .forms import TopicForm,EntryForm
 from django.http import Http404
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
 def index(request):
     """The home page for Learning Log."""
     return render(request, 'learning_logs/index.html')
+class TopicsListView(LoginRequiredMixin, ListView):
+    model = Topic
+    context_object_name = 'topics'
+    paginate_by = 3
+    template_name = 'learning_logs/topics.html'
+    
+    def get_queryset(self):
+        return Topic.objects.filter(owner=self.request.user).order_by('-data_added')
 
-@login_required
-def topics(request):
-    """Show the current user's topics."""
-    topics = Topic.objects.filter(owner=request.user).order_by('-data_added')
-    context = {'topics': topics}
-    return render(request, 'learning_logs/topics.html', context)
+# @login_required
+# def topics(request):
+#     """Show the current user's topics."""
+#     topics = Topic.objects.filter(owner=request.user).order_by('-data_added')
+#     context = {'topics': topics}
+#     return render(request, 'learning_logs/topics.html', context)
 
 @login_required
 def topic(request, topic_id):
